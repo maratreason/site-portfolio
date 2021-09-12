@@ -1,26 +1,37 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, {useState} from "react";
+import {Switch, Route, useLocation} from "react-router-dom";
+import {AnimatePresence} from "framer-motion";
+import styled from "styled-components";
+import GlobalStyle from "./globalStyle";
+import Home from "./pages/Home";
+import Skills from "./pages/Skills";
+import MyProjects from "./pages/MyProjects";
+
+const Section = styled.section`
+    position: relative;
+    overflow-x: hidden;
+`;
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    let location = useLocation();
+    const [isOpen, setIsOpen] = useState<boolean>(false);
+
+    const toggle = () => {
+        setIsOpen(!isOpen);
+    };
+
+    return <Section>
+        <AnimatePresence exitBeforeEnter>
+            <GlobalStyle />
+            {/* <Bars onClick={toggle} />
+            <MobileMenu toggle={toggle} isOpen={isOpen} /> */}
+            <Switch location={location} key={location.pathname}>
+                <Route path="/" exact component={() => <Home isOpen={isOpen} toggle={toggle} />} />
+                <Route path="/skills" component={() =>  <Skills isOpen={isOpen} toggle={toggle} />} />
+                <Route path="/my-projects" component={() => <MyProjects isOpen={isOpen} toggle={toggle} />} />
+            </Switch>
+        </AnimatePresence>
+    </Section>;
 }
 
 export default App;
